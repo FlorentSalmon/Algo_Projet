@@ -24,5 +24,3 @@ fs.readFile('Json/movies.json',{encoding: 'utf8'},function(err,data) {
         })
 })
 
-
-
