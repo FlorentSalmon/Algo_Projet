@@ -10,13 +10,7 @@ fs.readFile('Json/movies.json',{encoding: 'utf8'},function(err,data) {
         let title = index['title'] + ' (' + year + ') ';
         index['title'] = title;
     }
-    for(i in movies){
-        if(movies[i] == "}" ){
-            movies[i] = "},\n" ;
-            movies[i+1] = ""; 
-        }
-    }
-    movies = JSON.stringify(movies);
+    movies = JSON.stringify(movies, null, 3);
 
     fs.writeFile('Json/moviesDate.json',movies,function(err) {
         if(err) return console.error(err);
@@ -24,5 +18,16 @@ fs.readFile('Json/movies.json',{encoding: 'utf8'},function(err,data) {
         })
 })
 
+let start = new Date().getTime();
+    
+let stop = new Date().getTime();
+console.log("time : " + (stop - start));
 
+function sort_date(){
+    console.log("Danse la macarena")
+}
 
+console.log(process.argv);
+if(process.argv[2] == '-lol'){
+    sort_date();
+}
