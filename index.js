@@ -1,48 +1,43 @@
+const { title } = require('process');
+const benchmark = require("./benchmark");
+const search = require('./search');
+const transform = require('./transform');
+const sort = require('./sort')
 fs = require('fs')
-
-function read_and_write_file(fileIn, fileOut){
-    fs.readFile(fileIn,{encoding: 'utf8'},function(err,data) {
-        if(err) return console.error(err);
-        movies = JSON.parse(data);
-        for(i = 0; i < movies.length; i++){
-            let index = movies[i];
-            let date = new Date(index['release_date'] * 1000);
-            let year = date.getFullYear();
-            let title = index['title'] + ' (' + year + ')';
-            index['title'] = title;
-        }
-        movies = JSON.stringify(movies, null, 3);
-
-        fs.writeFile(fileOut,movies,function(err) {
-            if(err) return console.error(err);
-            console.log('done');
-            })
-    })
-}
-
-//read_and_write_file('Json/movies.json', 'Json/moviesDate.json');
-
-function sort_date(){
-    console.log('Winner')
-}
-
-function sort_titre(){
-    console.log('Looser')
-}
 
 arg = process.argv;
 for(i = 0; i < arg.length; i++){
     if(arg[i] == '-action'){
         if(arg[i+1] == 'sort_date'){
-            sort_date();
+            let x = ()=> {
+                sort.sort_date(arg[i+2], arg[i+3]);
+            } 
+            benchmark.benchmark(x);
         }
         if(arg[i+1] == 'sort_titre'){
-            sort_titre();
+            let x =()=> {
+                sort.sort_titre(arg[i+2], arg[i+3]);
+            }
+            benchmark.benchmark(x);
+        }
+        if(arg[i+1] == 'search_date'){
+            if(arg[i+4] == 'true'){
+                let x = () => {
+                    search.search_date_sorted(arg[i+2], arg[i+3])
+                }
+                benchmark.benchmark(x);
+            }
+            if(arg[i+4] == 'false'){
+                let x = () => {
+                    search.search_date_no_sorted(arg[i+2], arg[i+3])
+                }
+                benchmark.benchmark(x);
+            }
         }
     }
     if(arg[i] == "--h" || arg[i] == "--help"){
         console.log("Voici une aide à ce que peut faire le programme: \n" + 
-        "\t --help: Résumé de toutes les actions possibles \n" + 
+        "\t --help\--h: Résumé de toutes les actions possibles \n" + 
         "\t -action: Permet de réaliser des actions: \n" + 
         "\t \t -sort_date: sort_date ./fichierEntrer.json ./fichierSortie.json ; Pour oragniser votre fichjier dans l'ordre annuel \n" + 
         "\t \t -sort_titre: sort_titre ./fichierEntrer.json ./fichierSortie.json ; Pour oragniser votre fichjier dans l'ordre alphabetique\n" +
@@ -51,3 +46,5 @@ for(i = 0; i < arg.length; i++){
         "\t \t -color <CheminDossier> ; Pour connaitre la couleur moyenne des affiches de films \n");
     }
 }
+
+console.log(arg)
