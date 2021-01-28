@@ -5,6 +5,17 @@ const transform = require('./transform');
 const sort = require('./sort')
 fs = require('fs')
 
+function save_image() {
+const request = require('request')
+const download = (url, path, callback) => { request.head(url, (err, res, body) => {
+request(url) .pipe(fs.createWriteStream(path)) .on('close', callback)
+}) }
+const url = 'https://...'
+const path = './images/image.png'
+download(url, path, () => { console.log('✅ Done!')
+})
+}
+
 arg = process.argv;
 for(i = 0; i < arg.length; i++){
     if(arg[i] == '-action'){
@@ -47,4 +58,3 @@ for(i = 0; i < arg.length; i++){
     }
 }
 
-console.log(arg)
