@@ -3,26 +3,48 @@ const benchmark = require("./benchmark");
 const search = require('./search');
 const transform = require('./transform');
 const sort = require('./sort')
-fs = require('fs')
+const fs = require('fs')
+const request = require('request')
+
+/*
+const download = (url, path, callback) => {
+    request.head(url, (err, res, body) => {
+    request(url)
+    .pipe(fs.createWriteStream(path))
+    .on('close', callback)
+    })
+    }
+    fs.readFile(fileIn,{encoding: 'utf8'},function(err,data) {
+        if(err) return console.error(err);
+        movies = JSON.parse(data);
+        for(i = 0; i < movies.length; i++){
+            const url = movies[i].poster;
+            const path = './images/'+movies[i].id+'.png';
+            download(url, path, () => {
+        })
+    }
+})*/
+    
 
 function save_image() {
-const request = require('request')
-const download = (url, path, callback) => { request.head(url, (err, res, body) => {
-request(url) .pipe(fs.createWriteStream(path)) .on('close', callback)
-}) }
-const url = 'https://...'
-const path = './images/image.png'
-download(url, path, () => { console.log('✅ Done!')
-})
+    const request = require('request')
+    const download = (url, path, callback) => { request.head(url, (err, res, body) => {
+    request(url) .pipe(fs.createWriteStream(path)) .on('close', callback)
+    }) }
+    const url = 'https://...'
+    const path = './images/image.png'
+    download(url, path, () => { console.log('✅ Done!')
+    })
 }
+search.search_key_word('./Json/movies.json','boy' , 'Action');
 
 arg = process.argv;
 for(i = 0; i < arg.length; i++){
     if(arg[i] == '-action'){
         if(arg[i+1] == 'sort_date'){
-            let x = ()=> {
+            let x =()=> {
                 sort.sort_date(arg[i+2], arg[i+3]);
-            } 
+            }
             benchmark.benchmark(x);
         }
         if(arg[i+1] == 'sort_titre'){
@@ -44,6 +66,12 @@ for(i = 0; i < arg.length; i++){
                 }
                 benchmark.benchmark(x);
             }
+        }
+        if(arg[i+1] == 'search_key_word'){
+            let x =()=> {
+                search.search_key_word(arg[i+2], arg[i+3], arg[i+4])
+            }
+            benchmark.benchmark(x);
         }
     }
     if(arg[i] == "--h" || arg[i] == "--help"){

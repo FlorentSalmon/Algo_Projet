@@ -1,4 +1,5 @@
-fs = require('fs')
+const fs = require('fs')
+const request = require('request')
 
 function swap(tab,a,b){
     let tmp = tab[a];
@@ -33,23 +34,6 @@ function tri_date(movies){
         }
     }
 }
-
-module.exports ={
-    sort_date: function(fileIn, fileOut){
-        fs.readFile(fileIn,{encoding: 'utf8'},function(err,data) {
-            if(err) return console.error(err);
-            movies = JSON.parse(data);
-            tri_date(movies);
-    
-            movies = JSON.stringify(movies, null, 2);
-            fs.writeFile(fileOut,movies,function(err) {
-                if(err) return console.error(err);
-                console.log('done');
-                })
-        })
-    }
-}
-
 module.exports = {
     sort_titre: function(fileIn, fileOut){
         fs.readFile(fileIn,{encoding: 'utf8'},function(err,data) {
@@ -64,5 +48,22 @@ module.exports = {
                 })
         })
         console.info("Tri dans l'ordre alphabetique des films");
+    },
+
+    sort_date: function(fileIn, fileOut){
+        fs.readFile(fileIn,{encoding: 'utf8'},function(err,data) {
+            if(err) return console.error(err);
+            movies = JSON.parse(data);
+            tri_date(movies);
+    
+            movies = JSON.stringify(movies, null,2);
+            fs.writeFile(fileOut,movies,function(err) {
+                if(err) return console.error(err);
+                console.log('done');
+                })
+        })
+        console.info("Tri dans l'ordre annuelle des films");
     }
 }
+
+
