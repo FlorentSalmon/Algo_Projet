@@ -6,12 +6,44 @@ function swap(tab,a,b){
     tab[b] = tmp;
 }
 
-function findM(tab){
-    return Math.floor(tab.length / 2);
+function partitionner_date(tab,premier,dernier,pivot){
+    swap(tab,pivot,dernier);
+    j = premier;
+    for(i = premier;i<=dernier-1;i++){
+        if( tab[i].release_date <= tab[dernier].release_date){
+            swap(tab,i,j)
+            // Change tab[i] et tab[dernier]
+            j++;
+        }
+    }
+    swap(tab,dernier,j)
+    return j;
+  
+
+  function tri_rapide_date(tab,premier, dernier){
+    if(premier<dernier){
+        let pivot = Math.ceil((premier + dernier) / 2);
+        pivot = partitionner_date(tab,premier,dernier,pivot);
+        tri_rapide_date(tab,premier, pivot-1);
+        tri_rapide_date(tab,pivot+1,dernier);
+    }
+    return tab;
+  }
 }
 
-function search_sorted(movies,date){
-    
+function search_sorted(movies){
+    //pour i allant de (taille de movie)-1 à 1
+    for( let i = movies.length -1; i>=1;i--){
+        //pour j allant de 0 à i-1
+        for(let j = 0; j<=i-1; j++){
+        //si movies[j+1]["title"] < movies[j]["title"]
+            if(movies[j+1]["release_date"] < movies[j]["release_date"]){
+            //échanger T[j+1] avec T[j]
+            swap(movies,j+1,j)
+            }
+        }
+    }
+    return movies;
 }
 
 function isInDescription(word, description){
@@ -28,14 +60,21 @@ function isInDescription(word, description){
 module.exports = {
     search_date_sorted: function(fileIn, date){
         const data = fs.readFileSync(fileIn)
-            let start = new Date().getTime();
-            movies = JSON.parse(data);
-            let moviesSortedwithDate = search_sorted(movies, date);
-            
-            let stop = new Date().getTime(); 
-            console.log("\nThe program took " + (stop - start) + "ms\n"); 
-            moviesSortedWithDate = JSON.stringify(moviesSortedWithDate, null, 2);
-            fs.writeFileSync('Json/movies' + date + '.json',moviesSortedwithDate)
+        movies = JSON.parse(data); 
+        let start = new Date().getTime();
+        let moviesWithDate = [];
+        for(i = 0; i < movies.length; i++){
+            index = movies[i];
+            if(index['title'].includes('('+date+')')){
+                moviesWithDate.push(movies[i]);
+            } 
+        }
+        moviesWithDate = search_sorted(moviesWithDate)
+        let stop = new Date().getTime(); 
+        console.log("\nThe program took " + (stop - start) + "ms\n"); 
+        moviesWithDate = JSON.stringify(moviesWithDate, null, 2);
+        fs.writeFileSync('Json/movies' + date + '.json',moviesWithDate)
+        console.info('Recherche de tous les films de ' + date);
         return 'Json/movies' + date + '.json'
     },
 
@@ -77,17 +116,7 @@ module.exports = {
                     }
                 catch(TypeError) {}
             }
-            //pour i allant de (taille de movie)-1 à 1
-            for( let i = moviesWithKeyWord.length -1; i>=1;i--){
-            //pour j allant de 0 à i-1
-                for(let j = 0; j<=i-1; j++){
-                //si movies[j+1]["title"] < movies[j]["title"]
-                    if(moviesWithKeyWord[j+1]["release_date"] < moviesWithKeyWord[j]["release_date"]){
-                    //échanger T[j+1] avec T[j]
-                    swap(moviesWithKeyWord,j+1,j)
-                    }
-                }
-            }
+            tri_rapide_date(moviesWithKeyWord, 0, moviesWithKeyWord.length-1)
             console.log(moviesWithKeyWord[moviesWithKeyWord.length-1]);
             let stop = new Date().getTime(); 
             console.log("\nThe program took " + (stop - start) + "ms\n"); 

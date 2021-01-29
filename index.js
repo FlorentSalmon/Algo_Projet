@@ -8,12 +8,15 @@ const request = require('request');
 const save = require('./save')
 const Jimp = require('jimp') 
  
-/*Jimp.read('./path/to/image.jpg',function (err, image) {
+
+function get_average_rgb(path){
+Jimp.read(path,function (err, image) {
     image.getPixelColor(x, y);
     // returns the colour of that pixel e.g. 0xFFFFFFFF
     Jimp.intToRGBA(hex);
     // e.g. converts 0xFFFFFFFF to {r: 255, g: 255, b: 255, a:255}
-    });*/
+    });
+}
     
 
             
