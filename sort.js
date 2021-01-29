@@ -1,45 +1,84 @@
 const fs = require('fs')
 const request = require('request')
 
-function swap(tab,a,b){
-    let tmp = tab[a];
-    tab[a] = tab[b];
-    tab[b] = tmp;
+function swap(tab,from,to){
+    let tmp = tab[to];
+    // Variable ou est stoquer tab[to]
+    tab[to]= tab[from]; 
+    // tab[to] devient tab[from]
+    tab[from] = tmp;
+    // et tab[from] devient tab[to]
   }
   
-function tri_titre(movies){
-    //pour i allant de (taille de movie)-1 à 1
-    for( let i = movies.length -1; i>=1;i--){
-        //pour j allant de 0 à i-1
-        for(let j = 0; j<=i-1; j++){
-            //si movies[j+1]["title"] < movies[j]["title"]
-            if(movies[j+1]["title"] < movies[j]["title"]){
-                //échanger T[j+1] avec T[j]
-                swap(movies,j+1,j)
-            }
+  function partitionner_titre(tab,premier,dernier,pivot){
+    swap(tab,pivot,dernier);
+    j = premier;
+    for(i = premier;i<=dernier-1;i++){
+        if( tab[i].title <= tab[dernier].title){
+            swap(tab,i,j)
+            // Change tab[i] et tab[dernier]
+            j++;
         }
     }
-}
+    swap(tab,dernier,j)
+    return j;
+  }
+  
+  function tri_rapide_titre(t,premier, dernier){
+    if(premier<dernier){
+        let pivot = Math.ceil((premier + dernier) / 2);
+        pivot = partitionner_titre(t,premier,dernier,pivot);
+        tri_rapide_titre(t,premier, pivot-1);
+        tri_rapide_titre(t,pivot+1,dernier);
+    }
+    return t;
+  }
 
-function tri_date(movies){
-    //pour i allant de (taille de movie)-1 à 1
-    for( let i = movies.length -1; i>=1;i--){
-        //pour j allant de 0 à i-1
-        for(let j = 0; j<=i-1; j++){
-            //si movies[j+1]["title"] < movies[j]["title"]
-            if(movies[j+1]["release_date"] < movies[j]["release_date"]){
-                //échanger T[j+1] avec T[j]
-                swap(movies,j+1,j)
-            }
+  function partitionner_date(tab,premier,dernier,pivot){
+    swap(tab,pivot,dernier);
+    j = premier;
+    for(i = premier;i<=dernier-1;i++){
+        if( tab[i].release_date <= tab[dernier].release_date){
+            swap(tab,i,j)
+            // Change tab[i] et tab[dernier]
+            j++;
         }
     }
-}
-module.exports = {
+    swap(tab,dernier,j)
+    return j;
+  }
+  
+  function tri_rapide_date(tab,premier, dernier){
+    if(premier<dernier){
+        let pivot = Math.ceil((premier + dernier) / 2);
+        pivot = partitionner_date(tab,premier,dernier,pivot);
+        tri_rapide_date(tab,premier, pivot-1);
+        tri_rapide_date(tab,pivot+1,dernier);
+    }
+    return tab;
+  }
+   
+
+module.exports ={
+    sort_date: function(fileIn, fileOut){
+        fs.readFile(fileIn,{encoding: 'utf8'},function(err,data) {
+            if(err) return console.error(err);
+            movies = JSON.parse(data);
+            tri_rapide_date(movies, 0, movies.length - 1);
+    
+            movies = JSON.stringify(movies, null, 2);
+            fs.writeFile(fileOut,movies,function(err) {
+                if(err) return console.error(err);
+                console.log('done');
+                })
+        })
+    },
+
     sort_titre: function(fileIn, fileOut){
         fs.readFile(fileIn,{encoding: 'utf8'},function(err,data) {
             if(err) return console.error(err);
             movies = JSON.parse(data);
-            tri_titre(movies);
+            tri_rapide_titre(movies, 0, movies.length - 1);
     
             movies = JSON.stringify(movies, null,2);
             fs.writeFile(fileOut,movies,function(err) {
@@ -48,22 +87,6 @@ module.exports = {
                 })
         })
         console.info("Tri dans l'ordre alphabetique des films");
-    },
-
-    sort_date: function(fileIn, fileOut){
-        fs.readFile(fileIn,{encoding: 'utf8'},function(err,data) {
-            if(err) return console.error(err);
-            movies = JSON.parse(data);
-            tri_date(movies);
-    
-            movies = JSON.stringify(movies, null,2);
-            fs.writeFile(fileOut,movies,function(err) {
-                if(err) return console.error(err);
-                console.log('done');
-                })
-        })
-        console.info("Tri dans l'ordre annuelle des films");
     }
 }
-
 
