@@ -6,7 +6,18 @@ const sort = require('./sort')
 const fs = require('fs')
 const request = require('request');
 const save = require('./save')
+const Jimp = require('jimp') 
+ 
+/*Jimp.read('./path/to/image.jpg',function (err, image) {
+    image.getPixelColor(x, y);
+    // returns the colour of that pixel e.g. 0xFFFFFFFF
+    Jimp.intToRGBA(hex);
+    // e.g. converts 0xFFFFFFFF to {r: 255, g: 255, b: 255, a:255}
+    });*/
     
+
+            
+
 function isAction(arg, i, saving){
     if(arg[i] == '-action'){
         if(arg[i+1] == 'sort_date'){
@@ -38,6 +49,9 @@ function isAction(arg, i, saving){
         if(arg[i+1] == 'search_key_word'){
             search.search_key_word(arg[i+2], arg[i+3], arg[i+4])
         }
+        if(arg[i+1] == 'color'){
+            get_average_rgb('./images/618.jpg')
+        }
     }
 }
 arg = process.argv;
@@ -49,7 +63,6 @@ for(i = 0; i < arg.length; i++){
     }else if(saving == false){
         isAction(arg, i, false);
     }
-    
     
     if(arg[i] == "--h" || arg[i] == "--help"){
         console.log("Voici une aide à ce que peut faire le programme: \n" + 

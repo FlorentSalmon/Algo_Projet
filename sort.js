@@ -61,8 +61,7 @@ function swap(tab,from,to){
 
 module.exports ={
     sort_date: function(fileIn, fileOut){
-        fs.readFile(fileIn,{encoding: 'utf8'},function(err,data) {
-            if(err) return console.error(err);
+        const data = fs.readFileSync(fileIn)
             let start = new Date().getTime();
             movies = JSON.parse(data);
             tri_rapide_date(movies, 0, movies.length - 1);
@@ -71,19 +70,14 @@ module.exports ={
             console.log("\nThe program took " + (stop - start) + "ms\n"); 
             movies = JSON.stringify(movies, null,2);
 
-            fs.writeFile(fileOut,movies,function(err) {
-                if(err) return console.error(err);
-                console.log('done');
-                })
-        })
+            fs.writeFileSync(fileOut,movies)
         console.info("Tri dans l'ordre annuelle des films")        
         return fileOut
         
     },
 
     sort_titre: function(fileIn, fileOut){
-        fs.readFile(fileIn,{encoding: 'utf8'},function(err,data) {
-            if(err) return console.error(err);
+        const data = fs.readFileSync(fileIn)
             let start = new Date().getTime();
             movies = JSON.parse(data);
             tri_rapide_titre(movies, 0, movies.length - 1);
@@ -91,13 +85,9 @@ module.exports ={
             movies = JSON.stringify(movies, null,2);
             let stop = new Date().getTime(); 
             console.log("\nThe program took " + (stop - start) + "ms\n"); 
-            fs.writeFile(fileOut,movies,function(err) {
-                if(err) return console.error(err);
-                console.log('done');
-                })
-        })
-        console.info("Tri dans l'ordre alphabetique des films");
-        return fileOut  
+            fs.writeFileSync(fileOut,movies)
+            console.info("Tri dans l'ordre alphabetique des films");
+            return fileOut  
         
     }
 }

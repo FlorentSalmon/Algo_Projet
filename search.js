@@ -27,8 +27,7 @@ function isInDescription(word, description){
 
 module.exports = {
     search_date_sorted: function(fileIn, date){
-        fs.readFile(fileIn,{encoding: 'utf8'},function(err,data) {
-            if(err) return console.error(err);
+        const data = fs.readFileSync(fileIn)
             let start = new Date().getTime();
             movies = JSON.parse(data);
             let moviesSortedwithDate = search_sorted(movies, date);
@@ -36,11 +35,7 @@ module.exports = {
             let stop = new Date().getTime(); 
             console.log("\nThe program took " + (stop - start) + "ms\n"); 
             moviesSortedWithDate = JSON.stringify(moviesSortedWithDate, null, 2);
-            fs.writeFile('Json/movies' + date + '.json',moviesSortedwithDate,function(err) {
-                if(err) return console.error(err);
-                console.info('done');
-                })
-        })
+            fs.writeFileSync('Json/movies' + date + '.json',moviesSortedwithDate)
         return 'Json/movies' + date + '.json'
     },
 
@@ -48,33 +43,26 @@ module.exports = {
 
 
     search_date_no_sorted: function(fileIn, date){
-        fs.readFile(fileIn,{encoding: 'utf8'},function(err,data) {
-            if(err) return console.error(err);   
-            movies = JSON.parse(data); 
-            let start = new Date().getTime();
-            let moviesWithDate = [];
-            for(i = 0; i < movies.length; i++){
-                index = movies[i];
-                if(index['title'].includes('('+date+')')){
-                    moviesWithDate.push(movies[i]);
-                } 
-            }
-            let stop = new Date().getTime(); 
-            console.log("\nThe program took " + (stop - start) + "ms\n"); 
-            moviesWithDate = JSON.stringify(moviesWithDate, null, 2);
-            fs.writeFile('Json/movies' + date + '.json',moviesWithDate,function(err) {
-                if(err) return console.error(err);
-                console.info('done');
-                
-                })
-        })
+        const data = fs.readFileSync(fileIn)
+        movies = JSON.parse(data); 
+        let start = new Date().getTime();
+        let moviesWithDate = [];
+        for(i = 0; i < movies.length; i++){
+            index = movies[i];
+            if(index['title'].includes('('+date+')')){
+                moviesWithDate.push(movies[i]);
+            } 
+        }
+        let stop = new Date().getTime(); 
+        console.log("\nThe program took " + (stop - start) + "ms\n"); 
+        moviesWithDate = JSON.stringify(moviesWithDate, null, 2);
+        fs.writeFileSync('Json/movies' + date + '.json',moviesWithDate)
         console.info('Recherche de tous les films de ' + date);
         return 'Json/movies' + date + '.json'
     },
 
     search_key_word: function(fileIn ,key_word, genre){
-        fs.readFile(fileIn,{encoding: 'utf8'},function(err,data) {
-            if(err) return console.error(err);
+        const data = fs.readFileSync(fileIn)
             let start = new Date().getTime();   
             movies = JSON.parse(data); 
             let moviesWithKeyWord = [];
@@ -103,7 +91,5 @@ module.exports = {
             console.log(moviesWithKeyWord[moviesWithKeyWord.length-1]);
             let stop = new Date().getTime(); 
             console.log("\nThe program took " + (stop - start) + "ms\n"); 
-            
-        })
     }
 }
