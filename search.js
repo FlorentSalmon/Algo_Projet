@@ -1,5 +1,10 @@
 const fs = require('fs')
-const request = require('request')
+
+function swap(tab,a,b){
+    let tmp = tab[a];
+    tab[a] = tab[b];
+    tab[b] = tmp;
+}
 
 function findM(tab){
     return Math.floor(tab.length / 2);
@@ -24,15 +29,19 @@ module.exports = {
     search_date_sorted: function(fileIn, date){
         fs.readFile(fileIn,{encoding: 'utf8'},function(err,data) {
             if(err) return console.error(err);
+            let start = new Date().getTime();
             movies = JSON.parse(data);
             let moviesSortedwithDate = search_sorted(movies, date);
             
+            let stop = new Date().getTime(); 
+            console.log("\nThe program took " + (stop - start) + "ms\n"); 
             moviesSortedWithDate = JSON.stringify(moviesSortedWithDate, null, 2);
             fs.writeFile('Json/movies' + date + '.json',moviesSortedwithDate,function(err) {
                 if(err) return console.error(err);
                 console.info('done');
                 })
         })
+        return 'Json/movies' + date + '.json'
     },
 
 
@@ -42,6 +51,7 @@ module.exports = {
         fs.readFile(fileIn,{encoding: 'utf8'},function(err,data) {
             if(err) return console.error(err);   
             movies = JSON.parse(data); 
+            let start = new Date().getTime();
             let moviesWithDate = [];
             for(i = 0; i < movies.length; i++){
                 index = movies[i];
@@ -49,36 +59,23 @@ module.exports = {
                     moviesWithDate.push(movies[i]);
                 } 
             }
+            let stop = new Date().getTime(); 
+            console.log("\nThe program took " + (stop - start) + "ms\n"); 
             moviesWithDate = JSON.stringify(moviesWithDate, null, 2);
             fs.writeFile('Json/movies' + date + '.json',moviesWithDate,function(err) {
                 if(err) return console.error(err);
                 console.info('done');
+                
                 })
-        })
-        fileInput = 'Json/movies' + date + '.json';
-        const download = (url, path, callback) => {
-            request.head(url, (err, res, body) => {
-            request(url)
-            .pipe(fs.createWriteStream(path))
-            .on('close', callback)
-            })
-            }
-            fs.readFile(fileInput,{encoding: 'utf8'},function(err,data) {
-                if(err) return console.error(err);
-                movies = JSON.parse(data);
-                for(i = 0; i < movies.length; i++){
-                    const url = movies[i].poster;
-                    const path = './images/'+movies[i].id+'.png';
-                    download(url, path, () => {
-                })
-            }
         })
         console.info('Recherche de tous les films de ' + date);
+        return 'Json/movies' + date + '.json'
     },
 
     search_key_word: function(fileIn ,key_word, genre){
         fs.readFile(fileIn,{encoding: 'utf8'},function(err,data) {
-            if(err) return console.error(err);   
+            if(err) return console.error(err);
+            let start = new Date().getTime();   
             movies = JSON.parse(data); 
             let moviesWithKeyWord = [];
             for(i = 0; i < movies.length; i++){
@@ -86,19 +83,27 @@ module.exports = {
                 try{
                     for(j=0; j < index.genres.length; j++){
                         if(isInDescription(key_word, index.overview) && index.genres[j].toLowerCase() == genre.toLowerCase()){
-                            console.log(index);
                             moviesWithKeyWord.push(index);
                             }
                         } 
                     }
                 catch(TypeError) {}
-               
             }
-            moviesWithKeyWord = JSON.stringify(moviesWithKeyWord, null, 2);
-            fs.writeFile('Json/movies' + key_word + '.json',moviesWithKeyWord,function(err) {
-                if(err) return console.error(err);
-                console.info('done');
-            }) 
+            //pour i allant de (taille de movie)-1 à 1
+            for( let i = moviesWithKeyWord.length -1; i>=1;i--){
+            //pour j allant de 0 à i-1
+                for(let j = 0; j<=i-1; j++){
+                //si movies[j+1]["title"] < movies[j]["title"]
+                    if(moviesWithKeyWord[j+1]["release_date"] < moviesWithKeyWord[j]["release_date"]){
+                    //échanger T[j+1] avec T[j]
+                    swap(moviesWithKeyWord,j+1,j)
+                    }
+                }
+            }
+            console.log(moviesWithKeyWord[moviesWithKeyWord.length-1]);
+            let stop = new Date().getTime(); 
+            console.log("\nThe program took " + (stop - start) + "ms\n"); 
+            
         })
     }
 }

@@ -38,9 +38,11 @@ module.exports = {
     sort_titre: function(fileIn, fileOut){
         fs.readFile(fileIn,{encoding: 'utf8'},function(err,data) {
             if(err) return console.error(err);
+            let start = new Date().getTime();
             movies = JSON.parse(data);
             tri_titre(movies);
-    
+            let stop = new Date().getTime(); 
+            console.log("\nThe program took " + (stop - start) + "ms\n"); 
             movies = JSON.stringify(movies, null,2);
             fs.writeFile(fileOut,movies,function(err) {
                 if(err) return console.error(err);
@@ -48,21 +50,27 @@ module.exports = {
                 })
         })
         console.info("Tri dans l'ordre alphabetique des films");
+        return fileOut
     },
 
     sort_date: function(fileIn, fileOut){
         fs.readFile(fileIn,{encoding: 'utf8'},function(err,data) {
             if(err) return console.error(err);
+            let start = new Date().getTime();
             movies = JSON.parse(data);
             tri_date(movies);
     
             movies = JSON.stringify(movies, null,2);
+            let stop = new Date().getTime(); 
+            console.log("\nThe program took " + (stop - start) + "ms\n"); 
             fs.writeFile(fileOut,movies,function(err) {
                 if(err) return console.error(err);
                 console.log('done');
                 })
         })
         console.info("Tri dans l'ordre annuelle des films");
+        return fileOut
+        
     }
 }
 

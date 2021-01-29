@@ -4,6 +4,6 @@ module.exports =  {//Export the function to use it anywhere
         let start = new Date().getTime(); 
         program(); 
         let stop = new Date().getTime(); 
-        console.log("\nThe program took " + (stop - start) + "ms to execute\n"); 
+        console.log("\nThe program took " + (stop - start) + "ms\n"); 
     }
 }
