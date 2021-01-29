@@ -24,14 +24,14 @@ function swap(tab,from,to){
     return j;
   }
   
-  function tri_rapide_titre(t,premier, dernier){
+  function tri_rapide_titre(tab,premier, dernier){
     if(premier<dernier){
         let pivot = Math.ceil((premier + dernier) / 2);
-        pivot = partitionner_titre(t,premier,dernier,pivot);
-        tri_rapide_titre(t,premier, pivot-1);
-        tri_rapide_titre(t,pivot+1,dernier);
+        pivot = partitionner_titre(tab,premier,dernier,pivot);
+        tri_rapide_titre(tab,premier, pivot-1);
+        tri_rapide_titre(tab,pivot+1,dernier);
     }
-    return t;
+    return tab;
   }
 
   function partitionner_date(tab,premier,dernier,pivot){
@@ -72,6 +72,7 @@ module.exports ={
                 console.log('done');
                 })
         })
+        console.info("Tri dans l'ordre annuelle des films")
     },
 
     sort_titre: function(fileIn, fileOut){
