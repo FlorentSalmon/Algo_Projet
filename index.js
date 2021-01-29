@@ -11,10 +11,37 @@ const Jimp = require('jimp')
 
 function get_average_rgb(path){
 Jimp.read(path,function (err, image) {
-    image.getPixelColor(x, y);
-    // returns the colour of that pixel e.g. 0xFFFFFFFF
-    Jimp.intToRGBA(hex);
-    // e.g. converts 0xFFFFFFFF to {r: 255, g: 255, b: 255, a:255}
+    let width = image.bitmap.width;
+    let height = image.bitmap.height;
+    let rgba = []
+    for(i = 0; i < width; i++){
+        for(j = 0; j < height; j++){
+            x = i;
+            y = j; 
+            hex = image.getPixelColor(x, y);
+            // returns the colour of that pixel e.g. 0xFFFFFFFF
+            hex = Jimp.intToRGBA(hex);
+            // e.g. converts 0xFFFFFFFF to {r: 255, g: 255, b: 255, a:255}
+            rgba.push(hex);
+        }
+    }
+    let r = 0;
+    let g = 0;
+    let b = 0;
+    let a =0;
+    for(i = 0; i < rgba.length; i++){
+        r = rgba[i].r + r
+        g = rgba[i].g + g
+        b = rgba[i].b + b
+        a = rgba[i].a + a
+    }
+    mr = r / rgba.length;
+    mg = g / rgba.length;
+    mb = b / rgba.length;
+    ma = a / rgba.length;
+    hex = Jimp.rgbaToInt(mr, mg, mb, ma);
+    console.log('HEX: ' + hex);
+    return hex
     });
 }
     
@@ -53,7 +80,7 @@ function isAction(arg, i, saving){
             search.search_key_word(arg[i+2], arg[i+3], arg[i+4])
         }
         if(arg[i+1] == 'color'){
-            get_average_rgb('./images/618.jpg')
+            get_average_rgb(arg[i+2])
         }
     }
 }
