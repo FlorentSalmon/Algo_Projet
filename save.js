@@ -10,8 +10,7 @@ module.exports = {
             .on('close', callback)
             })
             }
-            fs.readFile(fileInput,{encoding: 'utf8'},function(err,data) {
-                if(err) return console.error(err);
+            const data = fs.readFileSync(fileInput)
                 movies = JSON.parse(data);
                 for(i = 0; i < movies.length; i++){
                     const url = movies[i].poster;
@@ -20,9 +19,6 @@ module.exports = {
                 })
             }
             movies = JSON.stringify(movies, null, 2);
-            fs.writeFile(fileInput,movies,function(err) {
-                if(err) return console.error(err);                
-                })
-        })
+            fs.writeFileSync(pathfolder + 'moviesForImages.json',movies)
     }
 }        

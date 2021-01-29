@@ -6,50 +6,25 @@ const sort = require('./sort')
 const fs = require('fs')
 const request = require('request');
 const save = require('./save')
-const Jimp = require('jimp') 
+const Jimp = require('jimp')
+const color = require('./color') 
  
 
-function get_average_rgb(path){
-Jimp.read(path,function (err, image) {
-    let width = image.bitmap.width;
-    let height = image.bitmap.height;
-    let rgba = []
-    for(i = 0; i < width; i++){
-        for(j = 0; j < height; j++){
-            x = i;
-            y = j; 
-            hex = image.getPixelColor(x, y);
-            // returns the colour of that pixel e.g. 0xFFFFFFFF
-            hex = Jimp.intToRGBA(hex);
-            // e.g. converts 0xFFFFFFFF to {r: 255, g: 255, b: 255, a:255}
-            rgba.push(hex);
-        }
-    }
-    let r = 0;
-    let g = 0;
-    let b = 0;
-    let a =0;
-    for(i = 0; i < rgba.length; i++){
-        r = rgba[i].r + r
-        g = rgba[i].g + g
-        b = rgba[i].b + b
-        a = rgba[i].a + a
-    }
-    mr = r / rgba.length;
-    mg = g / rgba.length;
-    mb = b / rgba.length;
-    ma = a / rgba.length;
-    hex = Jimp.rgbaToInt(mr, mg, mb, ma);
-    console.log('HEX: ' + hex);
-    return hex
-    });
-}
+
     
 
             
 
 function isAction(arg, i, saving){
     if(arg[i] == '-action'){
+        if(arg[i+1] == 'transform'){
+            fileInput = transform.transform(arg[i+2], arg[i+3]);
+            // Ajout des dates (Chemin entrant, Chemin sortant)
+            if(saving == true){
+                save.save_img(arg[i-1], fileInput)
+                 // Télécharge les images 
+            }
+        }
         if(arg[i+1] == 'sort_date'){
             fileInput = sort.sort_date(arg[i+2], arg[i+3]);
             // Tri par date (Chemin entrant, Chemin sortant)
@@ -89,7 +64,7 @@ function isAction(arg, i, saving){
             // Recherche par mot clé (Chemin entrant, mot clé, genre)
         }
         if(arg[i+1] == 'color'){
-            get_average_rgb(arg[i+2])
+            color.get_average_rgb(arg[i+2])
         }
     }
 }
@@ -108,6 +83,7 @@ for(i = 0; i < arg.length; i++){
         "\t --help\--h: Résumé de toutes les actions possibles \n" +
         "\t -save: Pour sauvegarder les images de films des diférentes action demandés \n" + 
         "\t -action: Permet de réaliser des actions: \n" + 
+        "\t \t -transform: transform ./fichierEntrer.json ./fichierSortie.json ; Pour ajouter les dates de sortis de chhaque film \n" +
         "\t \t -sort_date: sort_date ./fichierEntrer.json ./fichierSortie.json ; Pour oragniser votre fichjier dans l'ordre annuel \n" + 
         "\t \t -sort_titre: sort_titre ./fichierEntrer.json ./fichierSortie.json ; Pour oragniser votre fichjier dans l'ordre alphabetique\n" +
         "\t \t -search_date: search_date ./fichierEntrer.json <year> <sorted>(true or false) ; Pour chercher tous les films d'une certaine année \n" +

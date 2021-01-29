@@ -18,7 +18,7 @@ function partitionner_date(tab,premier,dernier,pivot){
     }
     swap(tab,dernier,j)
     return j;
-  
+} 
 
   function tri_rapide_date(tab,premier, dernier){
     if(premier<dernier){
@@ -28,7 +28,7 @@ function partitionner_date(tab,premier,dernier,pivot){
         tri_rapide_date(tab,pivot+1,dernier);
     }
     return tab;
-  }
+
 }
 
 function search_sorted(movies){

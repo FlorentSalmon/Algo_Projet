@@ -5,6 +5,7 @@ module.exports = {
     add_Date: function(fileIn, fileOut){
         fs.readFile(fileIn,{encoding: 'utf8'},function(err,data) {
             if(err) return console.error(err);
+            let start = new Date().getTime();
             movies = JSON.parse(data);
             for(i = 0; i < movies.length; i++){
                 let index = movies[i];
@@ -13,12 +14,14 @@ module.exports = {
                 let title = index['title'] + ' (' + year + ')';
                 index['title'] = title;
             }
+            let stop = new Date().getTime(); 
+            console.log("\nThe program took " + (stop - start) + "ms\n");
             movies = JSON.stringify(movies, null, 3);
-    
             fs.writeFile(fileOut,movies,function(err) {
                 if(err) return console.error(err);
                 console.log('done');
                 })
         })
+        return fileOut;
     }
 }
