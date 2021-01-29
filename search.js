@@ -90,7 +90,7 @@ module.exports = {
         moviesWithDate = JSON.stringify(moviesWithDate, null, 2);
         fs.writeFileSync('Json/movies' + date + '.json',moviesWithDate)
         // Ecrit le tableau dans un fichier json
-        console.info('Recherche de tous les films de ' + date);
+        console.info('Voici tous les films de ' + date);
         return 'Json/movies' + date + '.json'
     },
 
@@ -111,6 +111,7 @@ module.exports = {
             // Si la date demandé est présente dans le titre
                 moviesWithDate.push(movies[i]);
                 // Envoie le film dans le tableau moviesWithDate
+                console.log(index.title)
             } 
         }
         let stop = new Date().getTime(); 
@@ -118,7 +119,7 @@ module.exports = {
         moviesWithDate = JSON.stringify(moviesWithDate, null, 2);
         fs.writeFileSync('Json/movies' + date + '.json',moviesWithDate)
         // Ecrit le tableau dans un fichier json
-        console.info('Recherche de tous les films de ' + date);
+        console.info('Voici tous les films de ' + date);
         return 'Json/movies' + date + '.json'
     },
 
@@ -138,6 +139,7 @@ module.exports = {
                              // Si le mot clé est présent dans la description et le genre rentré est égal au genre du film
                             moviesWithKeyWord.push(index);
                             // Envoie le film dans le tableau moviesWithKeyWord
+                            console.log(index.title)
                             }
                         } 
                     }

@@ -12,12 +12,14 @@ module.exports = {
             }
             const data = fs.readFileSync(fileInput)
                 movies = JSON.parse(data);
+                // Récupération des liens de chaque images du fichier .json
                 for(i = 0; i < movies.length; i++){
                     const url = movies[i].poster;
                     const path = pathfolder + movies[i].id + '.jpg';
                     download(url, path, () => {
                 })
             }
+            // Ajout du fichier.json dans le dossier
             movies = JSON.stringify(movies, null, 2);
             fs.writeFileSync(pathfolder + 'moviesForImages.json',movies)
     }
