@@ -52,32 +52,41 @@ function isAction(arg, i, saving){
     if(arg[i] == '-action'){
         if(arg[i+1] == 'sort_date'){
             fileInput = sort.sort_date(arg[i+2], arg[i+3]);
+            // Tri par date (Chemin entrant, Chemin sortant)
             if(saving == true){
                 save.save_img(arg[i-1], fileInput)
+                 // Télécharge les images 
             }
         }
         if(arg[i+1] == 'sort_titre'){
             fileInput = sort.sort_titre(arg[i+2], arg[i+3]);
+            // Tri par titre (Chemin entrant, Chemin sortant)
             if(saving == true){
                 save.save_img(arg[i-1], fileInput)
+                // Télécharge les images
             }
         }
         if(arg[i+1] == 'search_date'){
             if(arg[i+4] == 'true'){
                 fileInput = search.search_date_sorted(arg[i+2], arg[i+3])
+                // Recherche par date trié (Chemin entrant, Chemin sortant, true)
                 if(saving == true){
                     save.save_img(arg[i-1], fileInput)
+                    // Télécharge les images
                 }
             }
             if(arg[i+4] == 'false'){
                 fileInput = search.search_date_no_sorted(arg[i+2], arg[i+3])
+                // Recherche par date non trié (Chemin entrant, Chemin sortant, false)
                 if(saving == true){
                     save.save_img(arg[i-1], fileInput)
+                    // Télécharge les images
                 }
             }
         }
         if(arg[i+1] == 'search_key_word'){
             search.search_key_word(arg[i+2], arg[i+3], arg[i+4])
+            // Recherche par mot clé (Chemin entrant, mot clé, genre)
         }
         if(arg[i+1] == 'color'){
             get_average_rgb(arg[i+2])
