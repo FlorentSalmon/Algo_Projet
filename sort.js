@@ -1,6 +1,7 @@
 const fs = require('fs')
 const request = require('request')
 
+// Fonction pour echanger deux positions
 function swap(tab,from,to){
     let tmp = tab[to];
     // Variable ou est stoquer tab[to]
@@ -10,20 +11,25 @@ function swap(tab,from,to){
     // et tab[from] devient tab[to]
   }
   
+  // Fonction Tri Titre
   function partitionner_titre(tab,premier,dernier,pivot){
     swap(tab,pivot,dernier);
+    // Echange pivot et dernier
     j = premier;
     for(i = premier;i<=dernier-1;i++){
         if( tab[i].title <= tab[dernier].title){
+            // Condiction pour respecter l'ordre alphabetique
             swap(tab,i,j)
             // Change tab[i] et tab[dernier]
             j++;
         }
     }
     swap(tab,dernier,j)
+    // Echanger dernier avec j
     return j;
   }
   
+  // Fonction Tri Titre
   function tri_rapide_titre(tab,premier, dernier){
     if(premier<dernier){
         let pivot = Math.ceil((premier + dernier) / 2);
@@ -34,20 +40,25 @@ function swap(tab,from,to){
     return tab;
   }
 
+  // Fonction Tri Date
   function partitionner_date(tab,premier,dernier,pivot){
     swap(tab,pivot,dernier);
+    // Echange pivot et dernier
     j = premier;
     for(i = premier;i<=dernier-1;i++){
         if( tab[i].release_date <= tab[dernier].release_date){
+            // Si la date actuel < la dernière date du fichier
             swap(tab,i,j)
             // Change tab[i] et tab[dernier]
             j++;
         }
     }
     swap(tab,dernier,j)
+    // Echanger dernier avec j
     return j;
   }
   
+  // Fonction Tri Date
   function tri_rapide_date(tab,premier, dernier){
     if(premier<dernier){
         let pivot = Math.ceil((premier + dernier) / 2);
