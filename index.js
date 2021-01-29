@@ -1,3 +1,4 @@
+// Tous les imports
 const { title } = require('process');
 const benchmark = require("./benchmark");
 const search = require('./search');
@@ -16,15 +17,18 @@ const color = require('./color')
             
 
 function isAction(arg, i, saving){
+    // Vérification du premier argument
     if(arg[i] == '-action'){
+        // Vérification de l'action a réaliser
         if(arg[i+1] == 'transform'){
-            fileInput = transform.transform(arg[i+2], arg[i+3]);
+            fileInput = transform.add_Date(arg[i+2], arg[i+3]);
             // Ajout des dates (Chemin entrant, Chemin sortant)
             if(saving == true){
                 save.save_img(arg[i-1], fileInput)
                  // Télécharge les images 
             }
         }
+        // Vérification de l'action a réaliser
         if(arg[i+1] == 'sort_date'){
             fileInput = sort.sort_date(arg[i+2], arg[i+3]);
             // Tri par date (Chemin entrant, Chemin sortant)
@@ -33,6 +37,7 @@ function isAction(arg, i, saving){
                  // Télécharge les images 
             }
         }
+        // Vérification de l'action a réaliser
         if(arg[i+1] == 'sort_titre'){
             fileInput = sort.sort_titre(arg[i+2], arg[i+3]);
             // Tri par titre (Chemin entrant, Chemin sortant)
@@ -41,7 +46,9 @@ function isAction(arg, i, saving){
                 // Télécharge les images
             }
         }
+        // Vérification de l'action a réaliser
         if(arg[i+1] == 'search_date'){
+            // Vérification de l'action a réaliser
             if(arg[i+4] == 'true'){
                 fileInput = search.search_date_sorted(arg[i+2], arg[i+3])
                 // Recherche par date trié (Chemin entrant, Chemin sortant, true)
@@ -51,6 +58,7 @@ function isAction(arg, i, saving){
                 }
             }
             if(arg[i+4] == 'false'){
+                // Vérification de l'action a réaliser
                 fileInput = search.search_date_no_sorted(arg[i+2], arg[i+3])
                 // Recherche par date non trié (Chemin entrant, Chemin sortant, false)
                 if(saving == true){
@@ -70,14 +78,16 @@ function isAction(arg, i, saving){
 }
 arg = process.argv;
 saving = false;
+// Menu de selection des entrées des arguments
 for(i = 0; i < arg.length; i++){
+    // Vérification du premier argument
     if(arg[i] == '-save'){
         isAction(arg, i+2, true);
         saving = true;
     }else if(saving == false){
         isAction(arg, i, false);
     }
-    
+    // Menu help pour avoir toutes les actions réalisables
     if(arg[i] == "--h" || arg[i] == "--help"){
         console.log("Voici une aide à ce que peut faire le programme: \n" + 
         "\t --help\--h: Résumé de toutes les actions possibles \n" +

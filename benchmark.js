@@ -1,4 +1,4 @@
-module.exports =  {//Export the function to use it anywhere
+module.exports =  {
     benchmark : (program)  =>
     {
         let start = new Date().getTime(); 
